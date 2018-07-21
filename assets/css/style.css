@@ -1,0 +1,39 @@
+body {
+    background-image: url("https://static1.squarespace.com/static/57d83ff1d482e91ad11d5834/t/5a451d3a53450ac1b2509b22/1478643027559/Team+Banner+White.png?format=2500w");
+}
+
+#main-block {
+    height: 600px;
+    width: 800px;
+    background-color: #ffffff;
+    margin: 100px auto;
+}
+
+#green {
+    background-color: rgba(194,236,70,.81);
+}
+
+#headline-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20pt;
+    padding: 10px;
+    text-decoration: underline;
+    color: rgb(51, 51, 51);
+}
+
+#time-row {
+    margin: 20px;   
+}
+
+#potential-answer {
+    margin: 20px;
+}
+
+#question-row {
+    padding: 100px;
+    align-content: left;
+}
+
+#start-game {
+    margin: 10px;
+}

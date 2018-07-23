@@ -37,3 +37,7 @@ body {
 #start-game {
     margin: 10px;
 }
+
+#user-selection {
+    float: right;
+}

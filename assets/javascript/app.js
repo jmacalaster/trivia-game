@@ -70,7 +70,8 @@ var answerOne = "";
 var answerTwo = "";
 var answerThree = "";
 var answerFour = "";
-var number = 30;
+var countStartNumber = 15;
+var timer;
 
 //We will need a reset function that can run before a new question is asked (after on-click event)
 
@@ -84,7 +85,8 @@ var clearAnswers = function(){
     answerTwo = "";
     answerThree = "";   
     answerFour = "";
-    $("#timer").text("00:00");
+    countStartNumber = 15;
+    $("#timer").html("15 seconds");
     $("#answer-1").text("");
     $("#answer-2").text("");
     $("#answer-3").text("");
@@ -108,8 +110,9 @@ var randomPlacement = Math.floor(Math.random() * 4) + 1;
 //To start the game we need an on-click function that will populate in the first question/answers into the correct divs 
 //Additionally we will need to start the timer 
 
-$("#start-game").on("click", function() {
-    console.log("Hello!");
+var newQuestion = function() {
+    questionsAsked++;
+    console.log(questionsAsked);
     
     $("#answer-1").text(randomAnswer[randomAnswerOne + randomQuestion]);
     $("#answer-2").text(randomAnswer[randomAnswerTwo + randomQuestion]);
@@ -126,7 +129,7 @@ $("#start-game").on("click", function() {
     console.log(randomAnswerThree);
     console.log(randomAnswerFour);
     console.log(randomPlacement);
-    console.log("answer-" + randomPlacement);
+    console.log("#answer-" + randomPlacement);
 
     console.log(questions[randomQuestion]);
     console.log(correctAnswer[randomQuestion]);
@@ -135,34 +138,56 @@ $("#start-game").on("click", function() {
     console.log(randomAnswer[randomAnswerTwo]);
     console.log(randomAnswer[randomAnswerThree]);
     console.log(randomAnswer[randomAnswerFour]);  
-    
-    function startTimer(duration, display) {
-        var timer = duration, minutes, seconds;
-        setInterval(function () {
-            minutes = parseInt(timer / 60, 10)
-            seconds = parseInt(timer % 60, 10);
-    
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-    
-            display.textContent = minutes + ":" + seconds;
-    
-            if (--timer < 0) {
-                timer = duration;
-            }
 
-            if (timer === 0){
-                alert("Times Up!")
-            }
-        }, 1000);
+}
+
+var questionTimer = {
+
+    counter: countStartNumber,
+    
+    countdown: function(){
+    questionTimer.counter--;
+    $("#timer").text(questionTimer.counter + " seconds left");
+        if (questionTimer.counter === 0) {
+        console.log("Times Up!");
+        timesUp();
+        }
+    },
+
+    timesUp: function() {
+        clearInterval(timer);
+        $("#timer").text("15 seconds");
     }
-        var twoMinutes = 60 / 4,
-            display = document.querySelector('#timer');
-        startTimer(twoMinutes, display);
+}
+
+
+$("#start-game").on("click", function(){
+    questionTimer.countdown(); 
+    timer = setInterval(questionTimer.countdown, 1000);
 
 });
 
+$("#end-game").on("click", function(){
+    questionTimer.timesUp();
+});
 
+//Create a function that will run to show the next question 
+
+var correctAnswer = function(){
+    console.log("Correct!");
+    correct++;
+    console.log(correct);
+    nextQuestion();
+
+}
+
+var incorrectAnswer = function(){
+    console.log("Incorrect!");
+    incorrect++;
+    console.log(incorrec);
+    nextQuestion();
+
+}
 //Next we will want to randomly populate content into the into the question div 
 
 //Then we will want to randomly populate the answer into an answer div and fill in the remaining answer divs with random Answers 

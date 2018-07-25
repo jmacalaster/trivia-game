@@ -31,6 +31,22 @@ var correctAnswer = [
         "Paul"
     ];
 
+var correctImage = [
+        ".\assets\images\Kathy.jpg",
+        ".\assets\images\Jesusmar.jpg",
+        ".\assets\images\Nick.jpg",
+        ".\assets\images\Bryant.jpg",
+        ".\assets\images\JoshB (2).jpg",
+        ".\assets\images\Huy.jpg",
+        ".\assets\images\Joe (2).jpg",
+        ".\assets\images\Walker.jpg",
+        ".\assets\images\Julius.jpg",
+        ".\assets\images\Walker.jpg",
+        ".\assets\images\Mark (2).jpg",
+        ".\assets\images\Christina.jpg",
+        ".\assets\images\Paul (2).jpg"
+];
+
 var randomAnswer = [
         "Joe",
         "Bryant",
@@ -113,13 +129,21 @@ var randomPlacement = Math.floor(Math.random() * 4) + 1;
 var newQuestion = function() {
     questionsAsked++;
     console.log(questionsAsked);
+
+    var randomQuestion = Math.floor(Math.random() * 9);
+    var randomAnswerOne = Math.floor(Math.random() * 13);
+    var randomAnswerTwo = Math.floor(Math.random() * 13);
+    var randomAnswerThree = Math.floor(Math.random() * 13);
+    var randomAnswerFour = Math.floor(Math.random() * 13);
+    var randomPlacement = Math.floor(Math.random() * 4) + 1;
+
     
     $("#answer-1").text(randomAnswer[randomAnswerOne + randomQuestion]);
     $("#answer-2").text(randomAnswer[randomAnswerTwo + randomQuestion]);
     $("#answer-3").text(randomAnswer[randomAnswerThree + randomQuestion]);
     $("#answer-4").text(randomAnswer[randomAnswerFour + randomQuestion]);
     $("#question-div").html(questions[randomQuestion]);
-    $("#answer-" + randomPlacement).text(correctAnswer[randomQuestion]);
+    $("#answer-" + questionsAsked).text(correctAnswer[randomQuestion]);
 
 //console.log to make sure everything is getting placed/generated correctly 
 
@@ -128,8 +152,8 @@ var newQuestion = function() {
     console.log(randomAnswerTwo);
     console.log(randomAnswerThree);
     console.log(randomAnswerFour);
-    console.log(randomPlacement);
-    console.log("#answer-" + randomPlacement);
+    console.log(questionsAsked);
+    console.log("#answer-" + questionsAsked);
 
     console.log(questions[randomQuestion]);
     console.log(correctAnswer[randomQuestion]);
@@ -139,7 +163,7 @@ var newQuestion = function() {
     console.log(randomAnswer[randomAnswerThree]);
     console.log(randomAnswer[randomAnswerFour]);  
 
-}
+};
 
 var questionTimer = {
 
@@ -160,32 +184,83 @@ var questionTimer = {
     }
 }
 
+var answeredCorrectly = function(){
+    setTimeOut(function(){
+        $("#question-div").append("<h1>Correct!</h1>");
+        // $("#question-div").append("img src='" + correctImage[randomQuestion] + "' />");
+    }, 
+    2 * 1000);
+
+    questionTimer.countdown(); 
+    timer = setInterval(questionTimer.countdown, 1000);
+    newQuestion();
+}
+
 
 $("#start-game").on("click", function(){
     questionTimer.countdown(); 
     timer = setInterval(questionTimer.countdown, 1000);
+    newQuestion();
+});
 
+
+$(".user-selection-1").on("click", function(){
+        if (questionsAsked===1) {
+            correctAnswerSelected();
+        }
+        else {
+            alert("Incorrect!");
+            correctAnswerSelected();
+        }
+});
+
+$(".user-selection-2").on("click", function(){
+        if (questionsAsked===2) {
+            correctAnswerSelected();
+        }
+        else {
+            alert("Incorrect!");
+        }
+});
+
+$(".user-selection-3").on("click", function(){
+        if (questionsAsked===3) {
+            correctAnswerSelected();
+        }
+        else {
+            alert("Incorrect!");
+        }
+});
+
+$(".user-selection-4").on("click", function(){
+        if (questionsAsked===4) {
+            correctAnswerSelected();
+        }
+        else {
+            alert("Incorrect!");
+        }
 });
 
 $("#end-game").on("click", function(){
     questionTimer.timesUp();
+    clearAnswers();
 });
 
 //Create a function that will run to show the next question 
 
-var correctAnswer = function(){
+var correctAnswerSelected = function(){
     console.log("Correct!");
     correct++;
     console.log(correct);
-    nextQuestion();
+    newQuestion();
 
 }
 
-var incorrectAnswer = function(){
+var incorrectAnswerSelected = function(){
     console.log("Incorrect!");
     incorrect++;
     console.log(incorrec);
-    nextQuestion();
+    newQuestion();
 
 }
 //Next we will want to randomly populate content into the into the question div 

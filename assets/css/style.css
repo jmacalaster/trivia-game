@@ -41,3 +41,9 @@ body {
 #user-selection {
     float: right;
 }
+
+#results {
+    margin: 10px;
+    font-size: 16pt;
+    
+}

@@ -75,6 +75,22 @@ var randomAnswer = [
         "Randy"
     ];
 
+var randomPlacement = [
+    2,
+    4,
+    3,
+    1,
+    3,
+    4,
+    1,
+    4,
+    4,
+    3,
+    1,
+    1,
+    2
+]
+
 //We will need to set up variables for correct, incorrect, unanswered, and number of questions asked 
 
 var correct = 0;
@@ -103,6 +119,7 @@ var clearAnswers = function(){
     answerFour = "";
     countStartNumber = 15;
     $("#timer").html("15 seconds");
+    $("#end-game-stats").html("");
     $("#answer-1").text("");
     $("#answer-2").text("");
     $("#answer-3").text("");
@@ -121,7 +138,6 @@ var randomAnswerOne = Math.floor(Math.random() * 13);
 var randomAnswerTwo = Math.floor(Math.random() * 13);
 var randomAnswerThree = Math.floor(Math.random() * 13);
 var randomAnswerFour = Math.floor(Math.random() * 13);
-var randomPlacement = Math.floor(Math.random() * 4) + 1;
 
 //To start the game we need an on-click function that will populate in the first question/answers into the correct divs 
 //Additionally we will need to start the timer 
@@ -135,7 +151,6 @@ var newQuestion = function() {
     var randomAnswerTwo = Math.floor(Math.random() * 13);
     var randomAnswerThree = Math.floor(Math.random() * 13);
     var randomAnswerFour = Math.floor(Math.random() * 13);
-    var randomPlacement = Math.floor(Math.random() * 4) + 1;
 
     
     $("#answer-1").text(randomAnswer[randomAnswerOne + randomQuestion]);
@@ -143,7 +158,7 @@ var newQuestion = function() {
     $("#answer-3").text(randomAnswer[randomAnswerThree + randomQuestion]);
     $("#answer-4").text(randomAnswer[randomAnswerFour + randomQuestion]);
     $("#question-div").html(questions[randomQuestion]);
-    $("#answer-" + questionsAsked).text(correctAnswer[randomQuestion]);
+    $("#answer-" + randomPlacement[questionsAsked]).text(correctAnswer[randomQuestion]);
 
 //console.log to make sure everything is getting placed/generated correctly 
 
@@ -153,7 +168,7 @@ var newQuestion = function() {
     console.log(randomAnswerThree);
     console.log(randomAnswerFour);
     console.log(questionsAsked);
-    console.log("#answer-" + questionsAsked);
+    console.log("#answer-" + randomPlacement[questionsAsked]);
 
     console.log(questions[randomQuestion]);
     console.log(correctAnswer[randomQuestion]);
@@ -164,6 +179,16 @@ var newQuestion = function() {
     console.log(randomAnswer[randomAnswerFour]);  
 
 };
+
+var timesUp = function() {
+    clearInterval(timer);
+    questionTimer.counter = 16;
+    questionTimer.countdown(); 
+    timer = setInterval(questionTimer.countdown, 1000);
+    console.log("Times Up");
+    unanswered++;
+    newQuestion();
+}
 
 var questionTimer = {
 
@@ -177,20 +202,9 @@ var questionTimer = {
         timesUp();
         }
     },
-
-    timesUp: function() {
-        clearInterval(timer);
-        $("#timer").text("15 seconds");
-    }
 }
 
 var answeredCorrectly = function(){
-    setTimeOut(function(){
-        $("#question-div").append("<h1>Correct!</h1>");
-        // $("#question-div").append("img src='" + correctImage[randomQuestion] + "' />");
-    }, 
-    2 * 1000);
-
     questionTimer.countdown(); 
     timer = setInterval(questionTimer.countdown, 1000);
     newQuestion();
@@ -198,6 +212,9 @@ var answeredCorrectly = function(){
 
 
 $("#start-game").on("click", function(){
+    clearAnswers();
+    clearInterval(timer);
+    questionTimer.counter = 16;
     questionTimer.countdown(); 
     timer = setInterval(questionTimer.countdown, 1000);
     newQuestion();
@@ -205,7 +222,7 @@ $("#start-game").on("click", function(){
 
 
 $(".user-selection-1").on("click", function(){
-        if (questionsAsked===1) {
+        if (randomPlacement[questionsAsked]===1) {
             correctAnswerSelected();
         }
         else {
@@ -215,7 +232,7 @@ $(".user-selection-1").on("click", function(){
 });
 
 $(".user-selection-2").on("click", function(){
-        if (questionsAsked===2) {
+        if (randomPlacement[questionsAsked]===2) {
             correctAnswerSelected();
         }
         else {
@@ -224,7 +241,7 @@ $(".user-selection-2").on("click", function(){
 });
 
 $(".user-selection-3").on("click", function(){
-        if (questionsAsked===3) {
+        if (randomPlacement[questionsAsked]===3) {
             correctAnswerSelected();
         }
         else {
@@ -233,11 +250,11 @@ $(".user-selection-3").on("click", function(){
 });
 
 $(".user-selection-4").on("click", function(){
-        if (questionsAsked===4) {
+        if (randomPlacement[questionsAsked]===4) {
             correctAnswerSelected();
         }
         else {
-            alert("Incorrect!");
+            incorrectAnswerSelected();
         }
 });
 
@@ -249,17 +266,27 @@ $("#end-game").on("click", function(){
 //Create a function that will run to show the next question 
 
 var correctAnswerSelected = function(){
+    if (questionsAsked <= 5) {
+    clearInterval(timer);
+    questionTimer.counter = 16;
+    questionTimer.countdown(); 
+    timer = setInterval(questionTimer.countdown, 1000);
     console.log("Correct!");
     correct++;
     console.log(correct);
     newQuestion();
+    }
+    else {
+    $("#headline-text").html("<h1>Game Over</h1>");
+    $("#end-game-stats").html("<div id='results'> Correct: " + correct + " </div><br><div id='results'> Inccorrect: " + incorrect + " </div><br><div id='results'> Unanswered: " + unanswered + "</div>");
+    questionTimer.timesUp();
+    }
 
 }
 
 var incorrectAnswerSelected = function(){
     console.log("Incorrect!");
     incorrect++;
-    console.log(incorrec);
     newQuestion();
 
 }
